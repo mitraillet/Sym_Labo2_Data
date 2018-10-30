@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Sym_Labo2_Data</string>
+    <string name="Async">Async</string>
+    <string name="Diff">Diff</string>
+    <string name="Object">Object</string>
+    <string name="JSON">JSON</string>
+    <string name="XML">XML</string>
+    <string name="send">Envoi</string>
+    <string name="receive">Réception</string>
+    <string name="authorChoice">1. Choix de l\'auteur :</string>
+    <string name="authorWork">2. Postes de l\'auteur :</string>
+</resources>
