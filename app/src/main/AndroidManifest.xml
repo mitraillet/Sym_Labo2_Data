@@ -20,5 +20,6 @@
         </activity>
         <activity android:name="com.mitraillet.sym_labo2_data.async" />
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>
