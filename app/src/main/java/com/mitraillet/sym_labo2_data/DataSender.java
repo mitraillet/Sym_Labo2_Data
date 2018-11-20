@@ -26,17 +26,17 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-public abstract class DataSender extends AppCompatActivity {
+public  class DataSender extends AppCompatActivity {
 
     private final int PHONE_NUMBER_SIZE = 10;
     private final String URL_SERVER_XML = "http://sym.iict.ch/rest/xml";
     private final String URL_SERVER_JSON = "http://sym.iict.ch/rest/json";
 
-    private Spinner choice = findViewById(R.id.spinner);
-    private EditText firstName = findViewById(R.id.firstName);
-    private EditText lastName  = findViewById(R.id.lastName);
-    private EditText phoneNumber = findViewById(R.id.phoneNumber);
-    private Button sendButton  = findViewById(R.id.sendButton);
+    private Spinner choice;
+    private EditText firstName;
+    private EditText lastName;
+    private EditText phoneNumber;
+    private Button sendButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -47,14 +47,6 @@ public abstract class DataSender extends AppCompatActivity {
         setContentView(R.layout.datasender);
 
         choice = findViewById(R.id.spinner);
-
-        List<String> list = new ArrayList<String>();
-        list.add("Json");
-        list.add("XML");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        choice.setAdapter(dataAdapter);
 
         firstName = findViewById(R.id.firstName);
         lastName  = findViewById(R.id.lastName);

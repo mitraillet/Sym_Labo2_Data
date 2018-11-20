@@ -14,7 +14,8 @@
         android:inputType="textPersonName"
         android:text="First Name"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="54dp" />
+        tools:layout_editor_absoluteY="54dp"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/lastName"
@@ -24,7 +25,8 @@
         android:inputType="textPersonName"
         android:text="Name"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="120dp" />
+        tools:layout_editor_absoluteY="120dp"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/phoneNumber"
@@ -34,7 +36,8 @@
         android:inputType="phone"
         android:text="0123456789"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="186dp" />
+        tools:layout_editor_absoluteY="186dp"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/sendButton"
@@ -42,7 +45,8 @@
         android:layout_height="wrap_content"
         android:text="Send"
         tools:layout_editor_absoluteX="147dp"
-        tools:layout_editor_absoluteY="244dp" />
+        tools:layout_editor_absoluteY="244dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/xmlTitle"
@@ -50,23 +54,26 @@
         android:layout_height="wrap_content"
         android:text="Response :"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="292dp" />
+        tools:layout_editor_absoluteY="292dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/xmlResponse"
         android:layout_width="386dp"
         android:layout_height="242dp"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="331dp" />
+        tools:layout_editor_absoluteY="331dp"
+        tools:ignore="MissingConstraints" />
 
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:entries="@id/JSON"
+        android:entries="@array/SerialName"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="16dp" />
+        tools:layout_editor_absoluteY="16dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView7"
@@ -74,6 +81,7 @@
         android:layout_height="28dp"
         android:text="Choose the format :"
         tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="17dp" />
+        tools:layout_editor_absoluteY="17dp"
+        tools:ignore="MissingConstraints" />
 
 </android.support.constraint.ConstraintLayout>
