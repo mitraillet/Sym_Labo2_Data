@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':okhttp-3.11.0'
+project(':okhttp-3.11.0').projectDir = new File('libs/okhttp-3.11.0')
