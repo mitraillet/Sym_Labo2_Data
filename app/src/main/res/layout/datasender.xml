@@ -14,7 +14,7 @@
         android:inputType="textPersonName"
         android:text="First Name"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="54dp" />
 
     <EditText
         android:id="@+id/lastName"
@@ -24,7 +24,7 @@
         android:inputType="textPersonName"
         android:text="Name"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="70dp" />
+        tools:layout_editor_absoluteY="120dp" />
 
     <EditText
         android:id="@+id/phoneNumber"
@@ -34,7 +34,7 @@
         android:inputType="phone"
         android:text="0123456789"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="138dp" />
+        tools:layout_editor_absoluteY="186dp" />
 
     <Button
         android:id="@+id/sendButton"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:text="Send"
         tools:layout_editor_absoluteX="147dp"
-        tools:layout_editor_absoluteY="205dp" />
+        tools:layout_editor_absoluteY="244dp" />
 
     <TextView
         android:id="@+id/xmlTitle"
@@ -58,5 +58,22 @@
         android:layout_height="242dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="331dp" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:entries="@id/JSON"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="211dp"
+        android:layout_height="28dp"
+        android:text="Choose the format :"
+        tools:layout_editor_absoluteX="10dp"
+        tools:layout_editor_absoluteY="17dp" />
 
 </android.support.constraint.ConstraintLayout>
