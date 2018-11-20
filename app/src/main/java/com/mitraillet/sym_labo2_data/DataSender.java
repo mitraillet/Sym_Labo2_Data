@@ -161,7 +161,7 @@ public abstract class DataSender extends AppCompatActivity {
             transformer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
             transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM,"http://sym.iict.ch/directory.dtd");
             transformer.transform(source,result);
-            
+
         } catch (TransformerException e) {
             e.printStackTrace();
             return "";
