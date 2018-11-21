@@ -3,10 +3,13 @@
     <string name="Async">Async</string>
     <string name="Diff">Diff</string>
     <string name="Object">Object</string>
-    <string name="JSON">JSON</string>
-    <string name="XML">XML</string>
+    <string name="JSONXML">JSON/XML</string>
     <string name="send">Envoi</string>
     <string name="receive">Réception</string>
     <string name="authorChoice">1. Choix de l\'auteur :</string>
     <string name="authorWork">2. Postes de l\'auteur :</string>
+    <string-array name="SerialName">
+        <item>JSON</item>
+        <item>XML</item>
+    </string-array>
 </resources>
