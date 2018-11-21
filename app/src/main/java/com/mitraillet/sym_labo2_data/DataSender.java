@@ -1,18 +1,24 @@
 package com.mitraillet.sym_labo2_data;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,24 +32,38 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public  class DataSender extends AppCompatActivity {
 
     private final int PHONE_NUMBER_SIZE = 10;
     private final String URL_SERVER_XML = "http://sym.iict.ch/rest/xml";
     private final String URL_SERVER_JSON = "http://sym.iict.ch/rest/json";
+    private static final int COMMAND_DISPLAY_SERVER_RESPONSE = 1;
+    private static final String KEY_SERVER_RESPONSE_OBJECT = "KEY_SERVER_RESPONSE_OBJECT";
+    private static final String TAG_OK_HTTP_ACTIVITY = "OK_HTTP_ACTIVITY";
+    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private static final MediaType XML = MediaType.parse("application/xml; charset=utf-8");
 
     private Spinner choice;
     private EditText firstName;
     private EditText lastName;
     private EditText phoneNumber;
+    private TextView response;
     private Button sendButton;
+    private Handler displayRespTextHandler;
+
+    private OkHttpClient okHttpClient;
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-
-        super.onCreate(savedInstanceState, persistentState);
-
-        // Get every listeners from the layout
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.datasender);
 
         choice = findViewById(R.id.spinner);
@@ -52,12 +72,34 @@ public  class DataSender extends AppCompatActivity {
         lastName  = findViewById(R.id.lastName);
         phoneNumber = findViewById(R.id.phoneNumber);
         sendButton  = findViewById(R.id.sendButton);
+        response = findViewById(R.id.response);
 
+        displayRespTextHandler = new Handler()
+        {
+            // When this handler receive message from child thread.
+            @Override
+            public void handleMessage(Message msg) {
+
+                // Check what this message want to do.
+                if(msg.what == COMMAND_DISPLAY_SERVER_RESPONSE)
+                {
+                    // Get server response text.
+                    Bundle bundle = msg.getData();
+                    String respText = bundle.getString(KEY_SERVER_RESPONSE_OBJECT);
+
+                    // Display server response text in text view.
+                    response.setText(respText);
+                }
+            }
+        };
+        okHttpClient = new OkHttpClient();
         sendButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
+                String url;
+                String data;
+                MediaType type;
                 // Make sure every field is complete, otherwise we complete the lastname field
                 if (firstName == null && lastName == null ) {
                     firstName.setText("");
@@ -69,21 +111,105 @@ public  class DataSender extends AppCompatActivity {
                 }
 
                 // Prepare the Data form to send to the server. Up to you to choose the format
-                if (choice.getSelectedItem().toString().equals("XML")) {
+                try
+                {
+                    if (choice.getSelectedItem().toString().equals("XML")) {
+                        // Set format
+                        data = setXML(firstName.toString(), lastName.toString(), phoneNumber.getText().toString());
+                        url = URL_SERVER_XML;
+                        type = XML;
 
-                    // Set format
-                    String data = setXML(firstName.toString(), lastName.toString(), phoneNumber.getText().toString());
-                } else {
+                    } else {
+                        data = setJSON(firstName.toString(), lastName.toString(), phoneNumber.getText().toString());
+                        url = URL_SERVER_JSON;
+                        type = JSON;
+                    }
+                    // Create okhttp3.Call object with post http request method.
+                    Call call = createHttpPostMethodCall(url, data, type);
 
-                    String data = setJSON(firstName.toString(), lastName.toString(), phoneNumber.getText().toString());
+                    // Execute the request and get the response asynchronously.
+                    call.enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            sendChildThreadMessageToMainThread("Asynchronous http post request failed.");
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if(response.isSuccessful())
+                            {
+                                // Parse and get server response text data.
+                                String respData = parseResponseText(response);
+
+                                // Notify activity main thread to update UI display text with Handler.
+                                sendChildThreadMessageToMainThread(respData);
+                            }
+                        }
+                    });
+                }catch(Exception ex)
+                {
+                    Log.e(TAG_OK_HTTP_ACTIVITY, ex.getMessage(), ex);
+                    sendChildThreadMessageToMainThread(ex.getMessage());
                 }
             }
         });
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    /* Create OkHttp3 Call object use post method with url. */
+    private Call createHttpPostMethodCall(String url, String param, MediaType type)
+    {
+        // Create okhttp3 form body builder.
+        RequestBody reqBody = RequestBody.create(type, param);
+
+        // Create a http request object.
+        Request.Builder builder = new Request.Builder();
+        builder = builder.url(url);
+        builder = builder.post(reqBody);
+        Request request = builder.build();
+
+        // Create a new Call object with post method.
+        Call call = okHttpClient.newCall(request);
+
+        return call;
+    }
+    /* Parse response code, message, headers and body string from server response object. */
+    private String parseResponseText(Response response)
+    {
+        // Get body text.
+        String respBody = "";
+        try {
+            respBody = response.body().string();
+        }catch(IOException ex)
+        {
+            Log.e(TAG_OK_HTTP_ACTIVITY, ex.getMessage(), ex);
+        }
+
+        return respBody;
+    }
+
+    // Send message from child thread to activity main thread.
+    // Because can not modify UI controls in child thread directly.
+    private void sendChildThreadMessageToMainThread(String respData)
+    {
+        // Create a Message object.
+        Message message = new Message();
+
+        // Set message type.
+        message.what = COMMAND_DISPLAY_SERVER_RESPONSE;
+
+        // Set server response text data.
+        Bundle bundle = new Bundle();
+        bundle.putString(KEY_SERVER_RESPONSE_OBJECT, respData);
+        message.setData(bundle);
+
+        // Send message to activity Handler.
+        displayRespTextHandler.sendMessage(message);
     }
 
     private boolean isValidNumber(String phone) {

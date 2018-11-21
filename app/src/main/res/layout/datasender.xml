@@ -10,78 +10,90 @@
         android:id="@+id/firstName"
         android:layout_width="383dp"
         android:layout_height="46dp"
+        android:layout_marginTop="56dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="First Name"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="54dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
 
     <EditText
         android:id="@+id/lastName"
         android:layout_width="383dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="108dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="120dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
 
     <EditText
         android:id="@+id/phoneNumber"
         android:layout_width="385dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="168dp"
         android:ems="10"
         android:inputType="phone"
         android:text="0123456789"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="186dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Button
         android:id="@+id/sendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="228dp"
+        android:layout_marginEnd="8dp"
         android:text="Send"
-        tools:layout_editor_absoluteX="147dp"
-        tools:layout_editor_absoluteY="244dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/xmlTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="276dp"
         android:text="Response :"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="292dp"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
 
     <TextView
-        android:id="@+id/xmlResponse"
+        android:id="@+id/response"
         android:layout_width="386dp"
         android:layout_height="242dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="331dp"
-        tools:ignore="MissingConstraints" />
+        android:layout_marginTop="304dp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
 
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="28dp"
         android:entries="@array/SerialName"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="16dp"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="211dp"
         android:layout_height="28dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:text="Choose the format :"
-        tools:layout_editor_absoluteX="10dp"
-        tools:layout_editor_absoluteY="17dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
 </android.support.constraint.ConstraintLayout>
