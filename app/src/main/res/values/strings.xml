@@ -12,4 +12,8 @@
         <item>JSON</item>
         <item>XML</item>
     </string-array>
+    <string-array name="genderChoice">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 </resources>
