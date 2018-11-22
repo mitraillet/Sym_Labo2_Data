@@ -19,6 +19,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,7 @@ public  class DataSender extends AppCompatActivity {
     private static final MediaType XML = MediaType.parse("application/xml; charset=utf-8");
 
     private Spinner choice;
+    private Spinner genderChoice;
     private EditText firstName;
     private EditText lastName;
     private EditText phoneNumber;
@@ -66,8 +68,8 @@ public  class DataSender extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.datasender);
 
-        choice = findViewById(R.id.spinner);
-
+        choice = findViewById(R.id.formatSpinner);
+        genderChoice = findViewById(R.id.genderSpinner);
         firstName = findViewById(R.id.firstName);
         lastName  = findViewById(R.id.lastName);
         phoneNumber = findViewById(R.id.phoneNumber);
@@ -113,14 +115,19 @@ public  class DataSender extends AppCompatActivity {
                 // Prepare the Data form to send to the server. Up to you to choose the format
                 try
                 {
+                    String fNameString = firstName.getText().toString();
+                    String lNameString = lastName.getText().toString();
+                    String phoneString = phoneNumber.getText().toString();
+                    String gender      = genderChoice.getSelectedItem().toString();
+
                     if (choice.getSelectedItem().toString().equals("XML")) {
                         // Set format
-                        data = setXML(firstName.toString(), lastName.toString(), phoneNumber.getText().toString());
+                        data = setXML(fNameString, lNameString, gender, phoneString);
                         url = URL_SERVER_XML;
                         type = XML;
 
                     } else {
-                        data = setJSON(firstName.toString(), lastName.toString(), phoneNumber.getText().toString());
+                        data = setJSON(fNameString, lNameString, gender, phoneString);
                         url = URL_SERVER_JSON;
                         type = JSON;
                     }
@@ -178,6 +185,7 @@ public  class DataSender extends AppCompatActivity {
 
         return call;
     }
+
     /* Parse response code, message, headers and body string from server response object. */
     private String parseResponseText(Response response)
     {
@@ -217,17 +225,18 @@ public  class DataSender extends AppCompatActivity {
         return phone.length() >= PHONE_NUMBER_SIZE && !phone.matches("A-Za-z");
     }
 
-    private String setJSON(String fName, String lName, String num) {
+    private String setJSON(String fName, String lName, String gender,String num) {
 
         JSONObject contact = new JSONObject();
 
         try {
+
             contact.put("First Name", fName);
             contact.put("Last Name", lName);
+            contact.put("Gender", gender);
             contact.put("Number", num);
 
             return contact.toString(3);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -235,57 +244,66 @@ public  class DataSender extends AppCompatActivity {
         return null;
     }
 
-    private String setXML(String firstName, String lastName, String number) {
+    private String setXML(String firstName, String lastName, String gender, String number) {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = null;
 
-        try {
-            docBuilder = factory.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-
-        Document doc = docBuilder.newDocument();
-
-        Element directory = doc.createElement("Directory");
-        Element contact = doc.createElement("Contact");
-        Element fName  = doc.createElement("FirstName");
-        Element lName  = doc.createElement("LastName");
-        Element num  = doc.createElement("Number");
-
-        fName.setTextContent(firstName);
-        lName.setTextContent(lastName);
-        num.setTextContent(number);
-
-        // Transform it to XML
-
-        doc.setXmlVersion("1.0");
-        doc.appendChild(directory);
-        directory.appendChild(contact);
-        contact.appendChild(fName);
-        contact.appendChild(lName);
-        contact.appendChild(num);
-
-        DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult();
+        Document doc;
+        DOMSource source;
+        String xmlString = "";
 
         try {
 
+            DocumentBuilder docBuilder = factory.newDocumentBuilder();
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
 
+            // Create a document to easily add xml nodes.
+            doc = docBuilder.newDocument();
+            source = new DOMSource(doc);
+
+            // Setting properties
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty(OutputKeys.VERSION,"1.0");
             transformer.setOutputProperty(OutputKeys.ENCODING,"UTF-8");
             transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM,"http://sym.iict.ch/directory.dtd");
-            transformer.transform(source,result);
 
-        } catch (TransformerException e) {
-            e.printStackTrace();
-            return "";
+            // Create Elements
+            Element directory = doc.createElement("directory");
+
+            Element person = doc.createElement("person");
+            Element fName  = doc.createElement("firstname");
+            Element lName  = doc.createElement("name");
+            Element mName  = doc.createElement("middlename");
+            Element nGender = doc.createElement("gender");
+            Element phone  = doc.createElement("phone");
+
+            fName.setTextContent(firstName);
+            lName.setTextContent(lastName);
+            nGender.setTextContent(gender);
+            phone.setTextContent(number);
+            phone.setAttribute("type","mobile");
+
+            // Transform it to XML
+            doc.appendChild(directory);
+
+            directory.appendChild(person);
+            person.appendChild(lName);
+            person.appendChild(fName);
+            person.appendChild(mName);
+            person.appendChild(nGender);
+            person.appendChild(phone);
+
+            // transform document to String
+            StringWriter writer = new StringWriter();
+
+            transformer.transform(source, new StreamResult(writer));
+            xmlString = writer.getBuffer().toString();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
 
-        // And transform it to a String
-        return result.toString();
+        return xmlString;
     }
 }
