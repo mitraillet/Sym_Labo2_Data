@@ -22,8 +22,8 @@ problèmes cela peut-il poser ?
 Lorsque l'on implémente l'écriture différée, il arrive que l'on ait soudainement plusieurs transmissions
 en attente qui deviennent possibles simultanément. Comment implémenter proprement cette
 situation (sans réalisation pratique) ? Voici deux possibilités :
-- Effectuer une connexion par transmission différée
-- Multiplexer toutes les connexions vers un même serveur en une seule connexion de transport.
+* Effectuer une connexion par transmission différée
+* Multiplexer toutes les connexions vers un même serveur en une seule connexion de transport.
 Dans ce dernier cas, comment implémenter le protocole applicatif, quels avantages peut-on
 espérer de ce multiplexage, et surtout, comment doit-on planifier les réponses du serveur
 lorsque ces dernières s'avèrent nécessaires ?
@@ -41,9 +41,11 @@ Ce qui engendrerait des erreurs sur le serveur pouvant le faire crash ou sur l'a
 L'avantage de ce manquement de vérification est la rapidité d'exécution car avec cela alourdi le processus pour la réception/envoi de données et apporte une flexibilité pour ajouter des données dans de nouvelles versions
 tant que les données minimales sont présentes on peut ajouter comme on le souhaite de nouvelles.
 
-b. L’utilisation d’un mécanisme comme Protocol Buffers8 est-elle compatible avec une
+b. L’utilisation d’un mécanisme comme Protocol Buffers est-elle compatible avec une
 architecture basée sur HTTP ? Veuillez discuter des éventuelles avantages ou limitations par
 rapport à un protocole basé sur JSON ou XML ?
+
+
 c. Par rapport à l’API GraphQL mise à disposition pour ce laboratoire. Avez-vous constaté des
 points qui pourraient être améliorés pour une utilisation mobile ? Veuillez en discuter, vous
 pouvez élargir votre réflexion à une problématique plus large que la manipulation effectuée.
