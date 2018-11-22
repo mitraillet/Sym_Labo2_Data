@@ -35,6 +35,12 @@ avantages et inconvénients respectifs.
 a. Quel inconvénient y a-t-il à utiliser une infrastructure de type REST/JSON n'offrant aucun
 service de validation (DTD, XML-schéma, WSDL) par rapport à une infrastructure comme SOAP
 offrant ces possibilités ? Est-ce qu’il y a en revanche des avantages que vous pouvez citer ?
+
+L'inconvénient du manque de validation dans les infrastructures de type REST/JSON est qu'il pourrait arriver que des valeurs obligatoires soit manquantes ou soit malformatées.
+Ce qui engendrerait des erreurs sur le serveur pouvant le faire crash ou sur l'application la faisant crash ou la rendant instable.
+L'avantage de ce manquement de vérification est la rapidité d'exécution car avec cela alourdi le processus pour la réception/envoi de données et apporte une flexibilité pour ajouter des données dans de nouvelles versions
+tant que les données minimales sont présentes on peut ajouter comme on le souhaite de nouvelles.
+
 b. L’utilisation d’un mécanisme comme Protocol Buffers8 est-elle compatible avec une
 architecture basée sur HTTP ? Veuillez discuter des éventuelles avantages ou limitations par
 rapport à un protocole basé sur JSON ou XML ?
