@@ -90,5 +90,6 @@ d’une compression DEFLATE, vous enverrez aussi plusieurs tailles de contenu po
 
 _En théorie, un fichier texte peut etre compresser jusqu'a plus de 85% de sa taille initiale (https://www.maximumcompression.com/data/text.php) selon les methodes utilisées  
 Comme Deflate est utilisé pour les formats zip et gzip, on devrait retrouver un gain équivalent pour la compression de nos données._
+_L'implémentation n'ayant pas fonctionné, nous ne possédons pas de données pour faire la comparaison en cas réel._
 
 

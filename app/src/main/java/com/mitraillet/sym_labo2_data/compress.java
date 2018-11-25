@@ -151,9 +151,9 @@ public  class compress extends AppCompatActivity {
                             if(response.isSuccessful())
                             {
                                 String respData;
-                                String contentEncoding = response.headers().get("Content-Encoding");
+                                String contentEncoding = response.headers().get("X-Content-Encoding");
                                 // Parse and get server response text data.
-                                if (contentEncoding != null && contentEncoding.equals("Deflate"))
+                                if (contentEncoding != null && contentEncoding.equals("deflate"))
                                 {
                                     InflaterInputStream responseBody = new InflaterInputStream(response.body().byteStream());
                                     respData = responseBody.toString();
