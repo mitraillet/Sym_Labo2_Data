@@ -70,6 +70,10 @@ les requêtes seraient plus courtes et plus facile à envoyer.
 Ainsi il faudrait trouver un juste milieu entre taille des données à envoyer et nombre de connexion à multiplexer pour que le serveur ne soit pas surchargé et que les données à envoyer ne soient  
 pas trop grosses._
 
+### Transmission Différée
+Le problème de l'implémentation de la sauvegarde directement dans la memoire est la taille des données, il n'est donc pas possible de bien les sauvegardés. 
+Il faut utiliser une base de données pour stocker les données de meilleures manière, et de les gérer plus facilement.
+
 ### Transmission d’objets
 a. Quel inconvénient y a-t-il à utiliser une infrastructure de type REST/JSON n'offrant aucun service de validation (DTD, XML-schéma, WSDL) par rapport à une infrastructure comme SOAP offrant ces possibilités ? Est-ce qu’il y a en revanche des avantages que vous pouvez citer ?
 
