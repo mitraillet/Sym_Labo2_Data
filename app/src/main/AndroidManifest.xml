@@ -20,6 +20,7 @@
         </activity>
         <activity android:name="com.mitraillet.sym_labo2_data.async" />
         <activity android:name="com.mitraillet.sym_labo2_data.DataSender" />
+        <activity android:name="com.mitraillet.sym_labo2_data.compress" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

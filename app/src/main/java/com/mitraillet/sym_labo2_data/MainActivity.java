@@ -17,11 +17,13 @@ public class MainActivity extends AppCompatActivity {
         Button mClickButton2 = findViewById(R.id.diff);
         Button mClickButton3 = findViewById(R.id.object);
         Button mClickButton4 = findViewById(R.id.JSONXML);
+        Button mClickButton5 = findViewById(R.id.compress);
 
         mClickButton1.setOnClickListener(onClickListener);
         mClickButton2.setOnClickListener(onClickListener);
         mClickButton3.setOnClickListener(onClickListener);
         mClickButton4.setOnClickListener(onClickListener);
+        mClickButton5.setOnClickListener(onClickListener);
     }
 
     // somewhere else in your code
@@ -48,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.JSONXML: {
                     // do something for button 2 click
                     Intent intent = new Intent(MainActivity.this, com.mitraillet.sym_labo2_data.DataSender.class);
+                    startActivity(intent);
+                    break;
+                }
+
+                case R.id.compress: {
+                    // do something for button 2 click
+                    Intent intent = new Intent(MainActivity.this, com.mitraillet.sym_labo2_data.compress.class);
                     startActivity(intent);
                     break;
                 }

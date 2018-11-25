@@ -4,6 +4,7 @@
     <string name="Diff">Diff</string>
     <string name="Object">Object</string>
     <string name="JSONXML">JSON/XML</string>
+    <string name="compress">Compressed</string>
     <string name="send">Envoi</string>
     <string name="receive">Réception</string>
     <string name="authorChoice">1. Choix de l\'auteur :</string>

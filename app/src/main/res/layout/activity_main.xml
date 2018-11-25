@@ -72,5 +72,14 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteY="185dp" />
 
+    <Button
+        android:id="@+id/compress"
+        android:layout_width="245dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/JSONXML"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:text="@string/compress" />
+
 
 </RelativeLayout>
