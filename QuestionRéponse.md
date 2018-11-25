@@ -3,28 +3,44 @@
 Les interfaces AsyncSendRequest et CommunicationEventListener utilisées au point 3.1 restent très
 (et certainement trop) simples pour être utilisables dans une vraie application : que se passe-t-il si le serveur n’est pas joignable dans l’immédiat ou s’il retourne un code HTTP d’erreur ? Veuillez proposer une nouvelle version, mieux adaptée, de ces deux interfaces pour vous aider à illustrer votre réponse.
 
-Code HTTP d'erreur :
-  Si l'on reçoit une erreur avec ce code, il n'y aura pas d'erreur générée au niveau de l'application et l'on recevra le message d'erreur HTML sans aucune conséquence sur l'application et aucun affichage (Pas sûr je peux pas test pour le moment).
+_Code HTTP d'erreur :
+  Si l'on reçoit une erreur avec ce code, il n'y aura pas d'erreur générée au niveau de l'application et l'on recevra le message d'erreur du serveur sans aucune conséquence sur l'application et aucun affichage._
 
-Le serveur est indisponible :
-  Presque même principe que pour HTTP error mais peut pas test
+_Le serveur est indisponible ou injoignable :
+  Même principe que pour HTTP erreur pas de possibilité d'avoir d'affichage mais l'application génèrera l'erreur `java.net.ConnectException: Failed to connect to sym.iict.ch/193.134.218.22:80` dans les logs de l'application._
 
 Nouvelle version :
 ```java
-public String sendRequest(String request, String url) throws Exception {
-  
-}
-
 
 SymComManager mcm = new SymComManager() ;
 mcm.setCommunicationEventListener(
   new CommunicationEventListener(){
     public boolean handleServerResponse(String response) {
       // Code de traitement de la réponse – dans le UI-Thread
+      if(response.isSuccessful())
+        {
+          String respData;
+          respData = parseResponseText(response);
+          // Notify activity main thread to update UI display text with Handler.
+          sendChildThreadMessageToMainThread(respData);
+        }
+        else {
+        // error case
+        switch (response.code()) {
+            case 404:
+                sendChildThreadMessageToMainThread("not found");
+                break;
+            case 500:
+                sendChildThreadMessageToMainThread("server problem");
+                break;
+            default:
+                sendChildThreadMessageToMainThread("unknown error");
+                break;
+        }
+      } 
     }
   }
 );
-mcm.sendRequest(…, …);
 ```
 
 ### Authentification
@@ -58,12 +74,12 @@ pas trop grosses._
 a. Quel inconvénient y a-t-il à utiliser une infrastructure de type REST/JSON n'offrant aucun service de validation (DTD, XML-schéma, WSDL) par rapport à une infrastructure comme SOAP offrant ces possibilités ? Est-ce qu’il y a en revanche des avantages que vous pouvez citer ?
 
   _L'inconvénient du manque de validation dans les infrastructures de type REST/JSON est qu'il pourrait arriver que des valeurs obligatoires soit manquantes ou soit malformatées. Ce qui engendrerait des erreurs sur le serveur pouvant le faire crasher ou sur l'application la faisant crash ou la rendant instable._ 
- _L'avantage de ce manquement de vérification est la rapidité d'exécution car avec cela alourdi le processus pour la réception/envoi de données et apporte une flexibilité pour ajouter des données dans de nouvelles versions tant que les données minimales sont présentes on peut ajouter comme on le souhaite de nouvelles._
+ _L'avantage de ce manquement de vérification est la rapidité d'exécution car, quand il y a vérification, il y a allourdissement du processus pour la réception/envoi de données et l'absence de cette dernière apporte une flexibilité pour ajouter des données dans de nouvelles versions tant que les données minimales (requise pour les anciennes versions) sont présentes on peut ajouter comme on le souhaite de nouvelles._
 
 b. L’utilisation d’un mécanisme comme Protocol Buffers est-elle compatible avec une architecture basée sur HTTP ? Veuillez discuter des éventuelles avantages ou limitations par rapport à un protocole basé sur JSON ou XML ?
 
-_Un mécanisme tel que Protocol Buffers est compatible avec HTTP car c'est un moyen de sérialiser des données. Il s'agit d'une alternative a XML/JSON. Ce protocol a pour avantage  
-de pouvoir coder plus facilement les valeurs numériques que XML et JSON._  
+_Un mécanisme tel que Protocol Buffers est compatible avec HTTP car c'est un moyen de sérialiser des données. Il s'agit d'une alternative a XML/JSON. Ce protocol a pour avantage de pouvoir coder plus facilement les valeurs numériques que XML et JSON._
+_Cependant, cette sérialisation rend impossible la lecture du contenu par un utilisateur contrairement à JSON ou XML._  
 
 c. Par rapport à l’API GraphQL mise à disposition pour ce laboratoire. Avez-vous constaté des points qui pourraient être améliorés pour une utilisation mobile ? Veuillez en discuter, vous pouvez élargir votre réflexion à une problématique plus large que la manipulation effectuée.
 

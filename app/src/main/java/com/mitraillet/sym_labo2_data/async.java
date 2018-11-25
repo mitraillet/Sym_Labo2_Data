@@ -99,6 +99,19 @@ public class async extends AppCompatActivity {
 
                                 // Notify activity main thread to update UI display text with Handler.
                                 sendChildThreadMessageToMainThread(respData);
+                            }else {
+                                // error case
+                                switch (response.code()) {
+                                    case 404:
+                                        sendChildThreadMessageToMainThread("not found");
+                                        break;
+                                    case 500:
+                                        sendChildThreadMessageToMainThread("server problem");
+                                        break;
+                                    default:
+                                        sendChildThreadMessageToMainThread("unknown error");
+                                        break;
+                                }
                             }
                         }
                     });

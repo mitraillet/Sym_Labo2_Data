@@ -165,6 +165,20 @@ public  class compress extends AppCompatActivity {
                                 // Notify activity main thread to update UI display text with Handler.
                                 sendChildThreadMessageToMainThread(respData);
                             }
+                            else {
+                                // error case
+                                switch (response.code()) {
+                                    case 404:
+                                        sendChildThreadMessageToMainThread("not found");
+                                        break;
+                                    case 500:
+                                        sendChildThreadMessageToMainThread("server problem");
+                                        break;
+                                    default:
+                                        sendChildThreadMessageToMainThread("unknown error");
+                                        break;
+                                }
+                            }
                         }
                     });
                 }catch(Exception ex)
@@ -185,21 +199,18 @@ public  class compress extends AppCompatActivity {
     /* Create OkHttp3 Call object use post method with url. */
     private Call createHttpPostMethodCall(String url, String param, MediaType type)
     {
-        // Create okhttp3 form body builder.
-        RequestBody reqBody;
         try {
         // Encode a String into bytes
-        byte[] data = param.getBytes("UTF-8");
-        ByteArrayOutputStream arr = new ByteArrayOutputStream();
-        OutputStream zipper = new DeflaterOutputStream(arr);
-        zipper.write(data);
-        zipper.close();
+        byte[] data = compressDeflate(param.getBytes("UTF-8"));
 
-        RequestBody body = RequestBody.create(type,  arr.toByteArray());
+        RequestBody body = RequestBody.create(type,  data);
 
             // Create a http request object.
         Request.Builder builder = new Request.Builder();
         builder = builder.addHeader("X-Network", "CSD");
+        /* L'entête ne fonctionne pas/n'est pas reconnue car sans le serveur reçoit un JSON invalid
+        mais avec rien du tout ou alors la compression n'est pas la bonne */
+        //builder = builder.addHeader("X-Content-Encoding", "deflate");
         builder = builder.url(url);
         builder = builder.post(body);
         Request request = builder.build();
@@ -216,6 +227,21 @@ public  class compress extends AppCompatActivity {
         }
 
         return null;
+    }
+
+    private static byte[] compressDeflate(byte[] data) {
+        try {
+            ByteArrayOutputStream bout = new ByteArrayOutputStream(1000);
+            DeflaterOutputStream compresser = new DeflaterOutputStream(bout);
+            compresser.write(data, 0, data.length);
+            compresser.finish();
+            compresser.flush();
+            return bout.toByteArray();
+        } catch (IOException ex) {
+            AssertionError ae = new AssertionError("IOException while writing to ByteArrayOutputStream!");
+            ae.initCause(ex);
+            throw ae;
+        }
     }
 
     /* Parse response code, message, headers and body string from server response object. */
