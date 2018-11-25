@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.diff: {
                     // do something for button 2 click
+                    Intent intent = new Intent(com.mitraillet.sym_labo2_data.MainActivity.this, differee.class);
+                    startActivity(intent);
                     break;
                 }
 
